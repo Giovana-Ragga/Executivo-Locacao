@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Executivo de Contratos de Locação — Grupo Ragga</title>
+<style>
+  :root{
+    --bg:#0a0c11;
+    --card:#12151d;
+    --card-2:#171b25;
+    --border:rgba(255,255,255,0.07);
+    --border-strong:rgba(255,255,255,0.14);
+    --text-primary:#f4f5f7;
+    --text-secondary:#a7acb8;
+    --text-muted:#6b7080;
+    --accent:#3aa0ff;
+    --accent-2:#7c8cff;
+    --accent-soft:rgba(58,160,255,0.12);
+    --good:#2fd06a;
+    --good-soft:rgba(47,208,106,0.14);
+    --warning:#f5b84e;
+    --warning-soft:rgba(245,184,78,0.14);
+    --serious:#ef8b5c;
+    --serious-soft:rgba(239,139,92,0.14);
+    --critical:#f0555a;
+    --critical-soft:rgba(240,85,90,0.14);
+    --violet:#9b8cf2;
+    --violet-soft:rgba(155,140,242,0.14);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background:radial-gradient(circle at 15% 0%, #0f1420 0%, var(--bg) 55%);
+    color:var(--text-primary);
+    line-height:1.45;
+    min-height:100vh;
+  }
+  .wrap{max-width:1400px;margin:0 auto;padding:22px 26px 70px;}
+
+  /* ============ TOP BAR ============ */
+  header.top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
+    gap:14px;margin-bottom:22px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand .logo{
+    width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#06121f;flex:none;
+  }
+  .brand h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.01em;}
+  .brand p{margin:0;font-size:12px;color:var(--text-muted);}
+  .top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .search-box{
+    display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);
+    border-radius:999px;padding:8px 14px;min-width:230px;
+  }
+  .search-box input{
+    background:none;border:none;outline:none;color:var(--text-primary);font-size:13px;width:100%;font-family:inherit;
+  }
+  .search-box input::placeholder{color:var(--text-muted);}
+  .btn{
+    background:var(--card);border:1px solid var(--border);color:var(--text-secondary);border-radius:10px;
+    padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;
+    font-family:inherit;
+  }
+  .btn:hover{border-color:var(--border-strong);color:var(--text-primary);}
+  .updated-tag{font-size:11.5px;color:var(--text-muted);text-align:right;}
+  .updated-tag strong{color:var(--text-secondary);}
+
+  /* ============ HERO KPI CARDS ============ */
+  .hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:26px;}
+  @media (max-width:980px){.hero-grid{grid-template-columns:1fr;}}
+  .hero-card{
+    background:linear-gradient(160deg,var(--card-2),var(--card));
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px 24px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s ease,border-color .15s ease;
+  }
+  .hero-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+  .hero-card .glow{
+    position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;filter:blur(10px);opacity:.25;
+  }
+  .hero-card .top-row{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1;}
+  .hero-card .icon{
+    width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;
+  }
+  .hero-card .arrow{color:var(--text-muted);font-size:16px;margin-top:6px;transition:transform .15s ease;}
+  .hero-card:hover .arrow{transform:translateX(3px);color:var(--text-secondary);}
+  .hero-card .label{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);font-weight:700;margin-top:16px;position:relative;z-index:1;}
+  .hero-card .value{font-size:32px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums;position:relative;z-index:1;letter-spacing:-.01em;}
+  .hero-card .sub{font-size:12.5px;color:var(--text-secondary);margin-top:6px;position:relative;z-index:1;}
+  .hero-card .sub b{color:var(--text-primary);}
+
+  /* ============ SECTION HEADERS ============ */
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+  .section-head h2{font-size:15px;margin:0;font-weight:700;}
+  .section-head p{margin:0;font-size:12.5px;color:var(--text-muted);}
+
+  /* ============ CONTRACT GRID ============ */
+  .contract-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px;}
+  @media (max-width:1200px){.contract-grid{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:860px){.contract-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.contract-grid{grid-template-columns:1fr;}}
+  .c-card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;
+    cursor:pointer;transition:transform .12s ease,border-color .12s ease;display:flex;flex-direction:column;gap:10px;
+  }
+  .c-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+  .c-card.hidden{display:none;}
+  .c-card .top-row{display:flex;justify-content:space-between;align-items:flex-start;}
+  .c-card .icon{
+    width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none;
+  }
+  .pill-status{
+    font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .pill-status .dot{width:6px;height:6px;border-radius:50%;}
+  .pill-status.st-pendente{background:var(--warning-soft);color:var(--warning);}
+  .pill-status.st-pendente .dot{background:var(--warning);}
+  .pill-status.st-vigente{background:var(--good-soft);color:var(--good);}
+  .pill-status.st-vigente .dot{background:var(--good);}
+  .c-card .name{font-size:16px;font-weight:800;margin-top:2px;color:var(--text-primary);}
+  .c-card .fantasia{font-size:10.5px;color:var(--text-muted);font-weight:600;margin-top:-1px;}
+  .c-card .addr{font-size:11.5px;color:var(--text-muted);line-height:1.35;}
+  .c-card .metric-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);font-weight:700;margin-top:4px;}
+  .c-card .metric-value{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;}
+  .c-card .metric-value.muted{font-size:13px;color:var(--warning);font-weight:700;}
+  .c-card .foot-row{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:9px;margin-top:2px;}
+  .mini-tag{
+    display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;
+  }
+  .mini-tag.idx{background:rgba(155,140,242,0.14);color:var(--violet);}
+  .mini-tag.cap-yes{background:var(--good-soft);color:var(--good);}
+  .mini-tag.cap-no{background:var(--serious-soft);color:var(--serious);}
+
+  footer.foot{margin-top:10px;padding-top:16px;border-top:1px solid var(--border);font-size:11.5px;color:var(--text-muted);}
+
+  /* ============ DRAWER / OVERLAY ============ */
+  .overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(2px);opacity:0;pointer-events:none;
+    transition:opacity .2s ease;z-index:40;
+  }
+  .overlay.show{opacity:1;pointer-events:auto;}
+  .drawer{
+    position:fixed;top:0;right:0;height:100%;width:min(880px,95vw);background:#0e1117;border-left:1px solid var(--border-strong);
+    z-index:41;transform:translateX(100%);transition:transform .25s ease;overflow-y:auto;box-shadow:-20px 0 60px rgba(0,0,0,.4);
+  }
+  .drawer.show{transform:translateX(0);}
+  .drawer-head{
+    position:sticky;top:0;background:#0e1117;border-bottom:1px solid var(--border);padding:22px 30px;z-index:2;
+    display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+  }
+  .drawer-head h3{font-size:19px;margin:0 0 4px;font-weight:800;}
+  .drawer-head p{font-size:13px;color:var(--text-muted);margin:0;}
+  .drawer-close{
+    background:var(--card);border:1px solid var(--border);color:var(--text-secondary);border-radius:9px;
+    width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex:none;
+  }
+  .drawer-close:hover{color:var(--text-primary);border-color:var(--border-strong);}
+  .drawer-body{padding:26px 30px 50px;max-width:760px;}
+
+  .d-section{margin-bottom:30px;}
+  .d-section-title{
+    display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:800;margin:0 0 14px;color:var(--text-primary);
+    padding-bottom:10px;border-bottom:1px solid var(--border);
+  }
+  .d-section-title .em{font-size:17px;}
+
+  .kv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .kv{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;}
+  .kv.wide{grid-column:1/-1;}
+  .kv .k{font-size:10.5px;text-transform:uppercase;color:var(--text-muted);font-weight:700;letter-spacing:.04em;}
+  .kv .v{font-size:14px;margin-top:4px;color:var(--text-primary);line-height:1.4;}
+
+  .big-stat{
+    background:linear-gradient(160deg,var(--card-2),var(--card));border:1px solid var(--border);border-radius:16px;
+    padding:20px 22px;margin-bottom:26px;
+  }
+  .big-stat .label{font-size:12px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+  .big-stat .value{font-size:34px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums;}
+  .big-stat .note{font-size:13px;color:var(--text-secondary);margin-top:6px;}
+
+  .obs-list{margin:0;padding-left:18px;font-size:13.5px;color:var(--text-secondary);}
+  .obs-list li{margin-bottom:9px;}
+
+  .degrau-bar{display:flex;height:40px;border-radius:10px;overflow:hidden;margin:6px 0 8px;border:1px solid var(--border);}
+  .degrau-seg{display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;padding:0 4px;}
+  .degrau-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--text-secondary);}
+  .degrau-legend span{display:inline-flex;align-items:center;gap:5px;}
+  .degrau-legend .sw{width:9px;height:9px;border-radius:3px;display:inline-block;}
+
+  .reajuste-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+  @media (max-width:600px){.reajuste-tiles{grid-template-columns:1fr;}}
+  .r-tile{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 14px;text-align:center;}
+  .r-tile .em{font-size:22px;}
+  .r-tile .lbl{font-size:10.5px;text-transform:uppercase;color:var(--text-muted);font-weight:700;margin-top:6px;letter-spacing:.03em;}
+  .r-tile .val{font-size:16px;font-weight:800;margin-top:3px;}
+  .r-tile.good .val{color:var(--good);}
+  .r-tile.bad .val{color:var(--serious);}
+
+  .amm-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+  .amm-controls .fc{display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px;}
+  .amm-controls label{font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;}
+  .amm-controls input{
+    padding:9px 11px;border:1px solid var(--border);border-radius:9px;font-size:13px;background:var(--card);
+    color:var(--text-primary);font-family:inherit;width:100%;
+  }
+  svg.chart{width:100%;height:230px;overflow:visible;}
+  .amm-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+  .amm-table th,.amm-table td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--border);}
+  .amm-table th{color:var(--text-muted);font-weight:700;font-size:10.5px;text-transform:uppercase;position:sticky;top:0;background:#12151d;}
+  .amm-table td{color:var(--text-secondary);}
+  .amm-table td.num{text-align:right;font-variant-numeric:tabular-nums;color:var(--text-primary);font-weight:700;}
+  .amm-table td.period{font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .amm-scroll{max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:12px;}
+
+  .list-row{
+    display:flex;justify-content:space-between;align-items:center;padding:13px 4px;border-bottom:1px solid var(--border);
+    cursor:pointer;gap:10px;
+  }
+  .list-row:hover{background:rgba(255,255,255,0.02);}
+  .list-row:last-child{border-bottom:none;}
+  .list-row .li-left{display:flex;align-items:center;gap:12px;}
+  .list-row .li-icon{
+    width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none;
+  }
+  .list-row .li-title{font-size:13px;font-weight:700;}
+  .list-row .li-sub{font-size:11.5px;color:var(--text-muted);margin-top:2px;}
+  .list-row .li-right{text-align:right;}
+  .list-row .li-value{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;}
+  .list-row .li-note{font-size:10.5px;color:var(--text-muted);margin-top:2px;}
+  .list-row .chev{color:var(--text-muted);font-size:14px;margin-left:4px;}
+
+  .badge-note{font-size:12px;color:var(--text-secondary);background:rgba(255,255,255,0.03);border:1px dashed var(--border);border-radius:10px;padding:11px 13px;margin-bottom:16px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">GR</div>
+      <div>
+        <h1>Grupo Ragga — Painel Executivo de Locação</h1>
+        <p>Controle de contratos, cláusulas de reajuste e AMM (Aluguel Mensal)</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="search-box">
+        <span style="color:var(--text-muted);font-size:13px;">🔎</span>
+        <input type="text" id="searchBox" placeholder="Buscar filial, locador, endereço...">
+      </div>
+      <button class="btn" onclick="window.print()">🖨️ Exportar / PDF</button>
+      <div class="updated-tag">Última atualização<br><strong id="updatedDate"></strong></div>
+    </div>
+  </header>
+
+  <!-- HERO KPI CARDS (expandem em drawer) -->
+  <div class="hero-grid">
+    <div class="hero-card" id="heroContratos">
+      <div class="glow" style="background:var(--accent);"></div>
+      <div class="top-row">
+        <div class="icon" style="background:var(--accent-soft);color:var(--accent);">📋</div>
+        <div class="arrow">→</div>
+      </div>
+      <div class="label">Contratos monitorados</div>
+      <div class="value" id="kpiTotalContratos">9</div>
+      <div class="sub" id="kpiTotalSub">Clique para ver todas as filiais</div>
+    </div>
+
+    <div class="hero-card" id="heroAluguel">
+      <div class="glow" style="background:var(--good);"></div>
+      <div class="top-row">
+        <div class="icon" style="background:var(--good-soft);color:var(--good);">💰</div>
+        <div class="arrow">→</div>
+      </div>
+      <div class="label">Aluguel pago hoje (real)</div>
+      <div class="value" id="kpiPagoHoje">—</div>
+      <div class="sub" id="kpiPagoHojeSub">Clique para detalhar o valor atual de cada contrato</div>
+    </div>
+
+    <div class="hero-card" id="heroRiscos">
+      <div class="glow" style="background:var(--warning);"></div>
+      <div class="top-row">
+        <div class="icon" style="background:var(--warning-soft);color:var(--warning);">⚠️</div>
+        <div class="arrow">→</div>
+      </div>
+      <div class="label">Sem teto de reajuste</div>
+      <div class="value" id="kpiSemTeto">—</div>
+      <div class="sub" id="kpiSemTetoSub">Contratos expostos ao índice sem limite máximo</div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div>
+      <h2>Contratos monitorados</h2>
+      <p>Clique em qualquer contrato para abrir a ficha completa</p>
+    </div>
+    <p id="gridCount"></p>
+  </div>
+  <div class="contract-grid" id="contractGrid"></div>
+
+  <footer class="foot">
+    Fonte: extração automatizada dos contratos de locação (PDF) enviados pelo usuário. Valores e cláusulas devem ser confirmados com os originais assinados antes de qualquer decisão financeira. Painel de uso interno — Grupo Ragga.
+  </footer>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div style="display:flex;align-items:flex-start;gap:12px;">
+      <div class="drawer-close" id="drawerBack" style="display:none;">←</div>
+      <div>
+        <h3 id="drawerTitle">Título</h3>
+        <p id="drawerSub">Subtítulo</p>
+      </div>
+    </div>
+    <div class="drawer-close" id="drawerClose">✕</div>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<script>
+/* =========================================================
+   DADOS DOS CONTRATOS
+   ========================================================= */
+const CONTRACTS = [
+  {
+    id:"cambe", nome:"Exp Cambé", nomeCompleto:"Exp Cambé", nomeFantasia:"Barracão Vespa",
+    locador:"S.E Administradora de Bens e Participações Ltda",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda",
+    endereco:"Rua Nossa Senhora do Rocio, 755, Centro, Cambé/PR",
+    area:"2.222,03 m²", tipo:"Imóvel existente (reforma pela locatária)", status:"vigente",
+    dataAssinatura:"2024-09-18", dataInicioReal:"2024-09-18", prazoMeses:72,
+    prazoLabel:"72 meses (6 anos) — término estimado 18/09/2030",
+    valorBase:25000,
+    degraus:[
+      {label:"Meses 1–3 (carência)", de:1, ate:3, valor:0},
+      {label:"Meses 4–24", de:4, ate:24, valor:2000},
+      {label:"Meses 25–36", de:25, ate:36, valor:13000},
+      {label:"Meses 37–48", de:37, ate:48, valor:15000},
+      {label:"Meses 49–60", de:49, ate:60, valor:18000},
+      {label:"Meses 61–72", de:61, ate:72, valor:25000},
+    ],
+    indice:"IGP-M", periodicidade:"Anual", cap:10,
+    carencia:"3 meses (destinada a reformas)",
+    garantia:"Fiança (Luiz Otávio Vespa Santos) + sinal de R$ 50.000 (paga aluguéis do 61º/62º mês)",
+    multa:"3x o último aluguel por infração; rescisão antecipada proporcional ao período faltante + indenização de obras se culpa da Locadora",
+    multaRule:{tipo:"prop_alugueis", n:3},
+    observacoes:[
+      "Maior contrato em área (2.222 m²) e com o escalonamento mais longo (6 degraus em 72 meses).",
+      "Teto de reajuste de 10% a.a. — um dos únicos dois contratos com cap explícito (o outro é o Exp Ibiporã, com 12% a.a.).",
+      "Cessão a empresa do mesmo grupo econômico da Locatária é permitida sem multa.",
+      "Sigilo absoluto sobre valores e condições do contrato (cláusula 10.7)."
+    ]
+  },
+  {
+    id:"camelias", nome:"Exp Camélias", nomeCompleto:"Exp Camélias", nomeFantasia:"Galileu 1",
+    locador:"J Paulo Silva Alves Administradora de Imóveis Ltda",
+    locatario:"Corn Food Comércio de Alimentos Ltda",
+    endereco:"Av. Guilherme de Almeida, 51, Loja 01 / Rua das Camélias, 55, Londrina/PR",
+    area:"N/A", tipo:"Imóvel existente", status:"vigente",
+    dataAssinatura:"2023-12-05", dataInicioReal:"2023-11-25", prazoMeses:60,
+    prazoLabel:"60 meses — término previsto 24/11/2028",
+    valorBase:7500, degraus:[],
+    indice:"IGP-M", periodicidade:"Anual", cap:null,
+    carencia:"60 dias (liberalidade do Locador)",
+    garantia:"Fiança (Luiz Otávio Vespa Santos)",
+    multa:"3 aluguéis por infração; indenização por igual período se rescisão antecipada sem aviso de 30 dias",
+    multaRule:{tipo:"fixo_alugueis", n:3},
+    observacoes:[
+      "Único contrato sem previsão de piso zero (proteção contra deflação do índice) nem cap — maior exposição a reajuste sem limites.",
+      "Reconhecimento de firma do fiador feito 'por semelhança', não 'verdadeira' — fragilidade formal a regularizar (mesma situação identificada no contrato Exp Leonor).",
+      "Cláusula de sucessão societária exige manutenção de ao menos 51% de cotas do sócio original."
+    ]
+  },
+  {
+    id:"casone", nome:"Exp Casone", nomeCompleto:"Exp Casone", nomeFantasia:"Biggs Pizza e Massas 14",
+    locador:"Super Nova Administração de Imóveis Próprios e Participações Ltda",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda EPP",
+    endereco:"Rua Araicás, 361, Vila Casoni, Londrina/PR",
+    area:"432 m² terreno / ~220 m² loja a construir", tipo:"BTS (construção)", status:"pendente",
+    dataAssinatura:"2024-04-01", dataInicioReal:null, prazoMeses:60,
+    prazoLabel:"60 meses, a contar da comunicação de conclusão da obra",
+    valorBase:6000,
+    degraus:[
+      {label:"Meses 1–12", de:1, ate:12, valor:6000},
+      {label:"Mês 13+", de:13, ate:60, valor:8000},
+    ],
+    indice:"IGP-M", periodicidade:"Anual (ou menor prazo se lei permitir)", cap:null,
+    carencia:"Não prevista explicitamente após entrega",
+    garantia:"Garantia real (imóvel de terceiro — fiador) + seguro obrigatório",
+    multa:"20% sobre valor da locação x meses de vigência, proporcional ao cumprido",
+    multaRule:{tipo:"percentual_vincendos", pct:0.20},
+    observacoes:[
+      "Locador constrói o imóvel integralmente a suas expensas conforme projeto do Locatário.",
+      "Cláusula de sucessão societária: mínimo 51% de cotas do sócio original sob pena de rescisão.",
+      "Sem data de início definida — depende de comunicação futura de conclusão da obra."
+    ]
+  },
+  {
+    id:"ibipora", nome:"Exp Ibiporã", nomeCompleto:"Exp Ibiporã", nomeFantasia:"Biggs e Isaias", nomeFantasiaNota:"Ibiporã",
+    locador:"RPA Administradora de Bens Próprios Ltda",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda",
+    endereco:"Lotes 04–08, Quadra 05, Jardim Zanoni, Ibiporã/PR",
+    area:"1.659,50 m² terreno / 631,26 m² projeto", tipo:"BTS (construção)", status:"pendente",
+    dataAssinatura:"2025-05-08", dataInicioReal:null, prazoMeses:120,
+    prazoLabel:"120 meses (10 anos), a contar da entrega das chaves",
+    valorBase:20000, degraus:[],
+    indice:"IGP-M", periodicidade:"Anual", cap:12,
+    carencia:"3 meses (reformas para início das atividades)",
+    garantia:"Fiança + sinal de R$ 40.000 (paga 2 primeiras parcelas pós-carência)",
+    multa:"Até 24º mês: 20 aluguéis; 24º–48º mês: 10 aluguéis; após 48º mês: 3 aluguéis proporcional",
+    multaRule:{tipo:"tiers_ibipora"},
+    observacoes:[
+      "Maior contrato em prazo (10 anos) sem escalonamento de valor — aluguel único de R$ 20.000 desde o início.",
+      "Teto de reajuste de 12% a.a. — o segundo e único outro contrato com cap explícito, ao lado do Exp Cambé (10% a.a.).",
+      "Locadora custeia reforma inicial estimada em R$ 335.734,17; excedente >5% é suportado pela Locatária.",
+      "Cessão a empresa do mesmo grupo econômico dispensa até a regra geral de vedação à sublocação."
+    ]
+  },
+  {
+    id:"leonor", nome:"Exp Leonor", nomeCompleto:"Exp Leonor", nomeFantasia:"Galileu 2",
+    locador:"Super Nova Administração de Imóveis Próprios e Participações Ltda",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda EPP",
+    endereco:"Rua Caviúna, 584, Jardim Leonor, Londrina/PR",
+    area:"317,30 m² terreno", tipo:"BTS (construção)", status:"pendente",
+    dataAssinatura:"2023-12-07", dataInicioReal:null, prazoMeses:60,
+    prazoLabel:"60 meses, a contar da comunicação de conclusão da obra",
+    valorBase:8000,
+    degraus:[
+      {label:"Meses 1–12", de:1, ate:12, valor:8000},
+      {label:"Mês 13+", de:13, ate:60, valor:10000},
+    ],
+    indice:"IGP-M", periodicidade:"Anual (ou menor prazo se lei permitir)", cap:null,
+    carencia:"60 dias a contar da entrega do imóvel",
+    garantia:"Garantia real (imóvel de terceiro) + fiança pessoal do proprietário do bem",
+    multa:"20% sobre valor da locação x meses de vigência, proporcional ao cumprido",
+    multaRule:{tipo:"percentual_vincendos", pct:0.20},
+    observacoes:[
+      "Contrato mais antigo da carteira (assinado em dez/2023) ainda pendente de entrega de obra — atenção ao prazo decorrido.",
+      "Reconhecimento de firma do fiador feito 'por semelhança' — mesma fragilidade formal do contrato Exp Camélias.",
+      "Indeferimento de alvará de funcionamento NÃO é considerado força maior para dispensa de multa."
+    ]
+  },
+  {
+    id:"mangaba", nome:"Exp Mangaba", nomeCompleto:"Exp Mangaba", nomeFantasia:"Milano Pizzaria (Interlagos)",
+    locador:"Aquarius Administração e Participações Ltda",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda",
+    endereco:"Rua Mangaba, 330, Panorama, Londrina/PR",
+    area:"168 m² atual → 464 m² após ampliação", tipo:"BTS (reforma/ampliação)", status:"pendente",
+    dataAssinatura:"2024-10-01", dataInicioReal:null, prazoMeses:60,
+    prazoLabel:"60 meses, a contar da entrega das chaves",
+    valorBase:8000, degraus:[],
+    indice:"IGP-M", periodicidade:"Anual", cap:null,
+    carencia:"60 dias",
+    garantia:"Fiança + sinal de R$ 16.000 (paga aluguéis do 3º/4º mês)",
+    multa:"3x último aluguel por infração; 50% da soma dos aluguéis vincendos até completar 5 anos se rescisão pela Locatária",
+    multaRule:{tipo:"percentual_vincendos", pct:0.50},
+    observacoes:[
+      "Reforma amplia o imóvel de 168 m² para 464 m² (quase triplica a área) — sem escalonamento de aluguel correspondente.",
+      "Prazo de obra: 120 dias após emissão do alvará de construção/reforma.",
+      "Nenhuma data de entrega das chaves registrada no documento — impede cálculo do término contratual."
+    ]
+  },
+  {
+    id:"rolandia", nome:"Exp Rolândia", nomeCompleto:"Exp Rolândia", nomeFantasia:"Biggs e Isaias",
+    locador:"M de Oliveira Construtora ME",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda EPP",
+    endereco:"Lote 0004, Quadra 104, Rolândia/PR",
+    area:"808,75 m² terreno", tipo:"BTS (construção)", status:"pendente",
+    dataAssinatura:"2024-07-23", dataInicioReal:null, prazoMeses:60,
+    prazoLabel:"60 meses, renovável por igual período, a contar da entrega da obra",
+    valorBase:15000, degraus:[],
+    indice:"IGP-M", periodicidade:"Anual (ou menor prazo se lei permitir)", cap:null,
+    carencia:"60 dias a contar da entrega do imóvel",
+    garantia:"Garantia real (imóvel de terceiro) + 2 aluguéis (R$ 30.000) pagos adiantados na assinatura",
+    multa:"20% sobre valor da locação x meses de vigência, proporcional ao cumprido",
+    multaRule:{tipo:"percentual_vincendos", pct:0.20},
+    observacoes:[
+      "Locadora é uma construtora (M de Oliveira Construtora ME) — perfil de contraparte distinto dos demais 8 contratos, cujos locadores são administradoras de imóveis (ex.: Exp Cambé, Exp Casone, Exp Leonor, Exp Ibiporã).",
+      "Prazo de obra: 12 meses a contar da aprovação do projeto na prefeitura.",
+      "Cláusula prevê possibilidade de atualização do valor após o 60º mês, além do reajuste anual regular."
+    ]
+  },
+  {
+    id:"vascodagama", nome:"Exp Vasco da Gama", nomeCompleto:"Exp Vasco da Gama", nomeFantasia:"Galileu 3",
+    locador:"Aquarius Administração e Participações Ltda",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda",
+    endereco:"Rua Vasco da Gama, 218, Londrina/PR",
+    area:"N/A (sobrado a reformar)", tipo:"BTS (reforma)", status:"pendente",
+    dataAssinatura:"2025-08-21", dataInicioReal:null, prazoMeses:60,
+    prazoLabel:"60 meses, a contar da entrega das chaves",
+    valorBase:8000, degraus:[],
+    indice:"IGP-M", periodicidade:"Anual", cap:null,
+    carencia:"60 dias após entrega das chaves",
+    garantia:"Fiança + sinal de R$ 8.000 (remunera corretor, conta como 1º aluguel)",
+    multa:"3x último aluguel por infração; 50% da soma dos aluguéis vincendos até completar 5 anos se rescisão pela Locatária",
+    multaRule:{tipo:"percentual_vincendos", pct:0.50},
+    observacoes:[
+      "Segundo contrato mais recente da carteira (assinado em 21/08/2025) — cinco dias antes do Exp Waldemar S (26/08/2025), que é o mais recente de todos.",
+      "Locatária pode rescindir sem ônus se não houver consenso sobre o projeto elétrico.",
+      "Obra a ser entregue em 150 dias após emissão do alvará; alvará deve ser obtido pela Locatária em até 45 dias (+30 dias de prorrogação)."
+    ]
+  },
+  {
+    id:"waldemars", nome:"Exp Waldemar S", nomeCompleto:"Exp Waldemar S", nomeFantasia:"Noé",
+    locador:"Columbia Empreendimentos Imobiliários Ltda",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda",
+    endereco:"Av. Waldemar Spranger, 55, Jardim São Jorge, Londrina/PR",
+    area:"N/A (sobrado a reformar)", tipo:"BTS (reforma)", status:"pendente",
+    dataAssinatura:"2025-08-26", dataInicioReal:null, prazoMeses:60,
+    prazoLabel:"60 meses, a contar da entrega da obra",
+    valorBase:6000,
+    degraus:[
+      {label:"Pré-entrega (a partir de 05/09/2025)", de:1, ate:1, valor:6000},
+      {label:"Pós-entrega da obra", de:2, ate:60, valor:18000},
+    ],
+    indice:"IGP-M", periodicidade:"Anual (a partir da entrega da obra)", cap:null,
+    carencia:"Sem carência formal; sinal de R$18.000 cobre os 3 primeiros meses",
+    garantia:"Fiança + sinal de R$ 18.000 (remunera corretor, cobre 3 primeiros meses)",
+    multa:"3x último aluguel por infração; 50% da soma dos aluguéis vincendos até completar 5 anos se rescisão pela Locatária",
+    multaRule:{tipo:"percentual_vincendos", pct:0.50},
+    observacoes:[
+      "Contrato mais recente da carteira (assinado em 26/08/2025) — cinco dias depois do Exp Vasco da Gama (21/08/2025).",
+      "Único contrato com fase pré-obra já onerosa (R$6.000/mês a partir de 05/09/2025), mesmo antes da entrega.",
+      "Salto de degrau expressivo: de R$6.000 para R$18.000 (3x) na entrega da obra — maior variação relativa da carteira (as próximas maiores são Exp Casone e Exp Leonor, com saltos de apenas 1,33x e 1,25x).",
+      "Documento contém numeração de cláusulas duplicada (erro de digitação no original) — recomenda-se solicitar retificação."
+    ]
+  },
+  {
+    id:"sunset", nome:"Exp Mall Sunset", nomeCompleto:"Exp Mall Sunset",
+    locador:"Super Nova Administração de Imóveis Próprios e Participações Ltda",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda",
+    endereco:"Lote 03, Quadra I, Loteamento Sunset Dream, Londrina/PR",
+    area:"N/A (BTS — construção)", tipo:"BTS (construção)", status:"pendente",
+    dataAssinatura:"2025-09-01", dataInicioReal:null, prazoMeses:60,
+    prazoLabel:"60 meses, a contar da entrega da obra",
+    valorBase:25000,
+    degraus:[
+      {label:"Pós-entrega, meses 1 a 12", de:1, ate:12, valor:25000},
+      {label:"Pós-entrega, a partir do mês 13", de:13, ate:60, valor:35000},
+    ],
+    indice:"IGP-M", periodicidade:"Anual", cap:null,
+    carencia:"60 dias a contar da entrega do imóvel",
+    garantia:"Garantia real (lote de propriedade do fiador Luiz Otávio Vespa Santos) + adiantamento de R$ 120.000 pago na assinatura",
+    multa:"20% sobre valor da locação x meses de vigência, proporcional ao cumprido",
+    multaRule:{tipo:"percentual_vincendos", pct:0.20},
+    observacoes:[
+      "Contrato mais recente da carteira (assinado em 01/09/2025), posterior ao Exp Waldemar S (26/08/2025).",
+      "Único contrato com adiantamento de aluguel tão alto na assinatura (R$ 120.000), além da garantia real.",
+      "Salto de degrau de R$25.000 para R$35.000 (1,4x) na passagem do mês 12 para o 13.",
+      "Reajuste anual pelo IGP-M com piso zero (nunca reduz o valor), sem teto definido."
+    ]
+  },
+  {
+    id:"paranagua", nome:"Exp Paranaguá", nomeCompleto:"Exp Paranaguá", nomeFantasia:"Pepito Burger",
+    locador:"Yama Investimentos e Participações Ltda (Mauro S. Yamamoto e Marisa C. Bobroff, coproprietários)",
+    locatario:"Amgeza Foods Comércio de Alimentos Ltda",
+    endereco:"Rua Paranaguá, 565, Loja, Centro, Londrina/PR",
+    area:"N/A (metragem não informada no contrato)", tipo:"Imóvel pronto para uso", status:"vigente",
+    dataAssinatura:"2023-11-07", dataInicioReal:"2023-11-10", prazoMeses:60,
+    prazoLabel:"60 meses, de 10/11/2023 a 09/11/2028 (datas fixas em contrato)",
+    valorBase:6480, degraus:[],
+    indice:"IGP-M (ou IGP-DI na falta deste)", periodicidade:"Anual", cap:null,
+    carencia:"45 dias de carência no aluguel",
+    garantia:"Fiança pessoal solidária (fiador Luiz Otávio Vespa Santos, sem valor fixo, com renúncia a benefícios de ordem/exoneração) + seguro contra incêndio/vendaval de no mínimo 100x o aluguel vigente, custeado pela locatária",
+    multa:"3 aluguéis vigentes, proporcional ao tempo de contrato não cumprido (1/60 por mês transcorrido); se a rescisão for por outro motivo (falta de garantia, cessão indevida, alteração de projeto, abandono), a multa de 3 aluguéis é integral, sem a redução proporcional",
+    multaRule:{tipo:"prop_alugueis", n:3},
+    observacoes:[
+      "Único contrato da carteira já entregue pronto para uso (não é BTS) — vistoria de entrada em 06/10/2023 confirmou boas condições, sem danos estruturais.",
+      "Mesmo fiador do Exp Mall Sunset (Luiz Otávio Vespa Santos), mas aqui a garantia é fiança pessoal, e não garantia real.",
+      "Reajuste anual pelo IGP-M (ou IGP-DI na falta deste) com piso zero (nunca reduz o valor), sem teto definido.",
+      "Multa rescisória por motivos diferentes de desocupação voluntária (ex.: falta de nova garantia, cessão/sublocação indevida, alteração de projeto arquitetônico, abandono) é cobrada de forma integral, sem a proporcionalidade — regra mais rígida que a maioria dos demais contratos.",
+      "Locatária (Amgeza Foods) é responsável pela retenção de IR na fonte, já que os locadores são pessoas físicas — obrigação que não aparece nos demais contratos, cujos locadores são pessoas jurídicas."
+    ]
+  },
+];
+
+const TODAY = new Date();
+
+const money = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+const moneyDec = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+const fmtDate = s => s ? new Date(s+'T00:00:00').toLocaleDateString('pt-BR') : 'N/A';
+
+const ICONS = {cambe:"🏬", camelias:"🌸", casone:"🏗️", ibipora:"🏗️", leonor:"🏗️", mangaba:"🔧", rolandia:"🏗️", vascodagama:"🔧", waldemars:"🔧", sunset:"🏗️", paranagua:"🍔"};
+const CARD_COLOR = {vigente:"var(--good)", pendente:"var(--warning)"};
+const CARD_SOFT  = {vigente:"var(--good-soft)", pendente:"var(--warning-soft)"};
+const STATUS_LABEL = {vigente:"Vigente", pendente:"Pendente de entrega"};
+
+/* =========================================================
+   VALOR ATUAL ("hoje pago") — lógica de negócio
+   ========================================================= */
+function valorContratualNoMes(c, mes){
+  if(!c.degraus.length) return c.valorBase;
+  for(const d of c.degraus){ if(mes >= d.de && mes <= d.ate) return d.valor; }
+  return c.degraus[c.degraus.length-1].valor;
+}
+function monthsElapsed(startStr, ref){
+  const start = new Date(startStr+'T00:00:00');
+  let m = (ref.getFullYear()-start.getFullYear())*12 + (ref.getMonth()-start.getMonth()) + 1;
+  return Math.max(1, m);
+}
+function getCurrentValue(c){
+  if(c.status === 'pendente' || !c.dataInicioReal){
+    return {known:false, value:null, note:`Pendente — aguardando entrega de obra. Valor pleno previsto: ${money(c.valorBase)}/mês.`};
+  }
+  const m = Math.min(monthsElapsed(c.dataInicioReal, TODAY), c.prazoMeses);
+  const value = valorContratualNoMes(c, m);
+  const plateauStart = c.degraus.length ? c.degraus[c.degraus.length-1].de : 1;
+  const emFase = m < plateauStart;
+  return {
+    known:true, value, mes:m,
+    note: emFase
+      ? `Ainda em fase de escalonamento contratual (mês ${m} de ${c.prazoMeses}).`
+      : `Valor pleno contratual (mês ${m} de ${c.prazoMeses}) — reajustes reais pelo índice ainda não incorporados nesta base.`
+  };
+}
+
+/* =========================================================
+   CALCULADORA DE MULTA RESCISÓRIA
+   ========================================================= */
+function mesesDecorridosMulta(c, dataRescisao){
+  if(!c.dataInicioReal) return 0; // vigência ainda não começou (obra pendente)
+  const start = new Date(c.dataInicioReal+'T00:00:00');
+  let m = (dataRescisao.getFullYear()-start.getFullYear())*12 + (dataRescisao.getMonth()-start.getMonth());
+  if(dataRescisao.getDate() < start.getDate()) m -= 1;
+  return Math.max(0, Math.min(m, c.prazoMeses));
+}
+function computeMulta(c, dataRescisao){
+  const decorridos = mesesDecorridosMulta(c, dataRescisao);
+  const restantes = c.prazoMeses - decorridos;
+  const valorRef = valorContratualNoMes(c, Math.max(1, decorridos+1));
+  const rule = c.multaRule;
+  let valor = 0, formula = "";
+  if(rule.tipo === "prop_alugueis"){
+    valor = rule.n * valorRef * (restantes / c.prazoMeses);
+    formula = `${rule.n} aluguéis do valor vigente (${moneyDec(rule.n*valorRef)}), reduzidos proporcionalmente ao tempo já cumprido — restam ${restantes} de ${c.prazoMeses} meses.`;
+  } else if(rule.tipo === "fixo_alugueis"){
+    valor = rule.n * valorRef;
+    formula = `${rule.n} aluguéis do valor vigente, sem redução proporcional (valor fixo previsto em contrato).`;
+  } else if(rule.tipo === "percentual_vincendos"){
+    valor = rule.pct * valorRef * restantes;
+    formula = `${(rule.pct*100).toFixed(0)}% × aluguel vigente (${moneyDec(valorRef)}) × ${restantes} meses restantes de contrato.`;
+  } else if(rule.tipo === "tiers_ibipora"){
+    if(decorridos <= 24){ valor = 20*valorRef; formula = `20 aluguéis do valor vigente — regra aplicável até o 24º mês (estamos no mês ${decorridos}).`; }
+    else if(decorridos <= 48){ valor = 10*valorRef; formula = `10 aluguéis do valor vigente — regra aplicável entre o 24º e o 48º mês (estamos no mês ${decorridos}).`; }
+    else { valor = 3*valorRef*(restantes/c.prazoMeses); formula = `3 aluguéis proporcionais ao período restante — regra aplicável após o 48º mês (restam ${restantes} de ${c.prazoMeses} meses).`; }
+  }
+  return {valor, decorridos, restantes, formula, valorRef, iniciado: !!c.dataInicioReal};
+}
+function renderMultaResult(c, dataRescisao){
+  const r = computeMulta(c, dataRescisao);
+  const avisoInicio = r.iniciado
+    ? ""
+    : `<div class="badge-note" style="margin-top:10px;">🏗️ A obra ainda não foi entregue, então a vigência não começou de fato. O valor abaixo simula uma rescisão logo no início do contrato (cenário de multa máxima) — é apenas uma referência.</div>`;
+  return `
+    <div class="big-stat" style="margin-bottom:0;">
+      <div class="label">Multa estimada nesta data</div>
+      <div class="value" style="color:var(--critical);">${moneyDec(r.valor)}</div>
+      <div class="note">${r.formula}</div>
+    </div>
+    ${avisoInicio}
+  `;
+}
+
+/* =========================================================
+   PROJEÇÃO AMM
+   ========================================================= */
+function computeProjection(c, startDate, annualRatePct, years){
+  const rate = annualRatePct/100;
+  const totalMonths = Math.min(years*12, c.prazoMeses || years*12);
+  const rows = [];
+  const plateauStart = c.degraus.length ? c.degraus[c.degraus.length-1].de : 1;
+  const plateauValor = c.degraus.length ? c.degraus[c.degraus.length-1].valor : c.valorBase;
+  for(let m=1; m<=totalMonths; m++){
+    let valor, evento = "";
+    if(m < plateauStart){
+      valor = valorContratualNoMes(c, m);
+      const d = c.degraus.find(d=>d.de===m);
+      if(d) evento = "Início de degrau";
+    } else {
+      const monthsSincePlateau = m - plateauStart;
+      const reajustesAplicados = Math.floor(monthsSincePlateau/12);
+      valor = plateauValor * Math.pow(1+rate, reajustesAplicados);
+      if(m === plateauStart) evento = c.degraus.length ? "Valor pleno atingido" : "Início da locação";
+      else if(monthsSincePlateau % 12 === 0) evento = "Reajuste anual";
+    }
+    const dStart = new Date(startDate);
+    dStart.setMonth(dStart.getMonth() + (m-1));
+    rows.push({mes:m, data:dStart, valor, evento});
+  }
+  return rows;
+}
+
+/* =========================================================
+   DRAWER (painel lateral genérico)
+   ========================================================= */
+const overlay = document.getElementById('overlay');
+const drawer = document.getElementById('drawer');
+function openDrawer(title, sub, bodyHtml){
+  document.getElementById('drawerTitle').textContent = title;
+  document.getElementById('drawerSub').textContent = sub;
+  document.getElementById('drawerBody').innerHTML = bodyHtml;
+  document.getElementById('drawerBody').scrollTop = 0;
+  overlay.classList.add('show'); drawer.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer(){
+  overlay.classList.remove('show'); drawer.classList.remove('show');
+  document.body.style.overflow = '';
+  navStack = []; currentView = null;
+  document.getElementById('drawerBack').style.display = 'none';
+}
+overlay.addEventListener('click', closeDrawer);
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+document.getElementById('drawerBack').addEventListener('click', goBack);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+
+/* =========================================================
+   NAVEGAÇÃO EM PILHA (permite "voltar" entre cards)
+   ========================================================= */
+let navStack = [];
+let currentView = null;
+function showView(viewFn, {root=false}={}){
+  if(root){ navStack = []; }
+  else if(currentView){ navStack.push(currentView); }
+  currentView = viewFn;
+  viewFn();
+  document.getElementById('drawerBack').style.display = navStack.length ? 'flex' : 'none';
+}
+function goBack(){
+  if(!navStack.length) return;
+  currentView = navStack.pop();
+  currentView();
+  document.getElementById('drawerBack').style.display = navStack.length ? 'flex' : 'none';
+}
+
+/* =========================================================
+   HERO 1 — LISTA DE TODOS OS CONTRATOS
+   ========================================================= */
+function openContractsList(){
+  const rows = CONTRACTS.map(c=>{
+    return `
+    <div class="list-row" data-open-contract="${c.id}">
+      <div class="li-left">
+        <div class="li-icon" style="background:${CARD_SOFT[c.status]};color:${CARD_COLOR[c.status]};">${ICONS[c.id]||"🏢"}</div>
+        <div>
+          <div class="li-title">${c.nomeFantasia || c.nome}</div>
+          <div class="li-sub">${c.nome}${c.nomeFantasiaNota ? ` (${c.nomeFantasiaNota})` : ''} · ${c.endereco.split(',').slice(0,2).join(',')}</div>
+        </div>
+      </div>
+      <div class="li-right">
+        <span class="pill-status st-${c.status}"><span class="dot"></span>${STATUS_LABEL[c.status]}</span>
+      </div>
+      <span class="chev">›</span>
+    </div>`;
+  }).join('');
+  openDrawer("Contratos monitorados", `${CONTRACTS.length} contratos assinados — clique em um para abrir a ficha completa`, rows);
+  bindListRowClicks();
+}
+
+/* =========================================================
+   HERO 2 — ALUGUEL PAGO HOJE
+   ========================================================= */
+function computeTotals(){
+  let pagoHoje = 0, plenoComprometido = 0;
+  CONTRACTS.forEach(c=>{
+    plenoComprometido += c.valorBase;
+    const cur = getCurrentValue(c);
+    if(cur.known) pagoHoje += cur.value;
+  });
+  return {pagoHoje, plenoComprometido};
+}
+function openAluguelDetail(){
+  const rows = CONTRACTS.slice().sort((a,b)=>{
+    const av = getCurrentValue(a).known ? 1 : 0, bv = getCurrentValue(b).known ? 1 : 0;
+    return bv - av;
+  }).map(c=>{
+    const cur = getCurrentValue(c);
+    const valTxt = cur.known ? money(cur.value) : "Pendente";
+    const noteTxt = cur.known ? cur.note : `Assinado em ${fmtDate(c.dataAssinatura)} — ${cur.note}`;
+    return `
+    <div class="list-row" data-open-contract="${c.id}">
+      <div class="li-left">
+        <div class="li-icon" style="background:${CARD_SOFT[c.status]};color:${CARD_COLOR[c.status]};">${ICONS[c.id]||"🏢"}</div>
+        <div>
+          <div class="li-title">${c.nomeFantasia || c.nome}</div>
+          <div class="li-sub" style="max-width:260px;">${c.nomeFantasia ? c.nome+' · ' : ''}${noteTxt}</div>
+        </div>
+      </div>
+      <div class="li-right">
+        <div class="li-value" style="${cur.known?'':'color:var(--warning);font-size:12.5px;'}">${valTxt}</div>
+        <div class="li-note">pleno: ${money(c.valorBase)}</div>
+      </div>
+      <span class="chev">›</span>
+    </div>`;
+  }).join('');
+  const t = computeTotals();
+  const header = `
+    <div class="big-stat">
+      <div class="label">Total pago hoje (contratos já vigentes)</div>
+      <div class="value" style="color:var(--good);">${money(t.pagoHoje)}</div>
+      <div class="note">Soma do valor contratual efetivamente em pagamento nos contratos com imóvel já entregue.</div>
+    </div>
+    <div class="big-stat">
+      <div class="label">Aluguel pleno comprometido (após todas as entregas)</div>
+      <div class="value">${money(t.plenoComprometido)}</div>
+      <div class="note">Run-rate total da carteira quando todos os BTS pendentes forem entregues e atingirem o valor integral.</div>
+    </div>
+    <div class="badge-note">⚠ Valores "pendentes" ainda não geram desembolso — o aluguel só passa a ser devido após a entrega da obra/chaves. Os reajustes reais pelo IGP-M acumulado ainda não estão incorporados aos valores "pago hoje" — use o Projetor de AMM na ficha de cada contrato para simular cenários futuros.</div>
+  `;
+  openDrawer("Aluguel por contrato — hoje", "Valor efetivamente devido/pago em cada filial na data de hoje", header + rows);
+  bindListRowClicks();
+}
+
+/* =========================================================
+   HERO 3 — SEM TETO DE REAJUSTE
+   ========================================================= */
+function openSemTetoDetail(){
+  const rows = CONTRACTS.slice().sort((a,b)=> (a.cap?1:0) - (b.cap?1:0)).map(c=>{
+    const hasCap = !!c.cap;
+    return `
+    <div class="list-row" data-open-contract="${c.id}">
+      <div class="li-left">
+        <div class="li-icon" style="background:${CARD_SOFT[c.status]};color:${CARD_COLOR[c.status]};">${ICONS[c.id]||"🏢"}</div>
+        <div>
+          <div class="li-title">${c.nomeFantasia || c.nome}</div>
+          <div class="li-sub">${c.nomeFantasia ? c.nome+' · ' : ''}Reajuste anual por ${c.indice}</div>
+        </div>
+      </div>
+      <div class="li-right">
+        <div class="li-value" style="font-size:13px;${hasCap?'color:var(--good);':'color:var(--serious);'}">${hasCap ? '🟢 Teto '+c.cap+'% a.a.' : '🔴 Sem teto'}</div>
+      </div>
+      <span class="chev">›</span>
+    </div>`;
+  }).join('');
+  const semTeto = CONTRACTS.filter(c=>!c.cap).length;
+  const header = `
+    <div class="big-stat">
+      <div class="label">Contratos sem limite máximo de reajuste</div>
+      <div class="value" style="color:var(--serious);">${semTeto} de ${CONTRACTS.length}</div>
+      <div class="note">Nestes contratos, o aluguel sobe todo ano na variação total do índice, sem limite — pode subir muito em anos de índice alto.</div>
+    </div>
+    <div class="badge-note">🟢 Teto = existe um limite máximo de quanto o aluguel pode subir por ano, mesmo que o índice suba mais. 🔴 Sem teto = o aluguel acompanha 100% da variação do índice, sem limite.</div>
+  `;
+  openDrawer("Sem teto de reajuste", "Quais contratos têm (ou não) um limite máximo de reajuste anual", header + rows);
+  bindListRowClicks();
+}
+
+/* =========================================================
+   FICHA DE CONTRATO — VISÃO ÚNICA (sem abas)
+   ========================================================= */
+const DEGRAU_COLORS = ["#8bb8ea","#3aa0ff","#1c5cab","#9b8cf2","#eb6834","#eda100"];
+
+function renderDegrausBar(c){
+  if(!c.degraus.length) return `<p style="font-size:13px;color:var(--text-secondary);">Aluguel único, sem escalonamento: <strong style="color:var(--text-primary);">${money(c.valorBase)}</strong>/mês.</p>`;
+  const totalMeses = c.degraus[c.degraus.length-1].ate;
+  let bar = '<div class="degrau-bar">';
+  let legend = '<div class="degrau-legend">';
+  c.degraus.forEach((d,i)=>{
+    const width = ((d.ate - d.de + 1)/totalMeses*100).toFixed(1);
+    const color = DEGRAU_COLORS[i % DEGRAU_COLORS.length];
+    bar += `<div class="degrau-seg" style="width:${width}%;background:${color};" title="${d.label}: ${money(d.valor)}">${money(d.valor)}</div>`;
+    legend += `<span><span class="sw" style="background:${color};"></span>${d.label}</span>`;
+  });
+  bar += '</div>'; legend += '</div>';
+  return bar + legend;
+}
+
+function openContractDetail(id){
+  const c = CONTRACTS.find(x=>x.id===id);
+  const cur = getCurrentValue(c);
+  const hasCap = !!c.cap;
+  const body = `
+    <div class="d-section">
+      <div class="big-stat">
+        <div class="label">${cur.known ? "Valor pago hoje" : "Status atual"}</div>
+        <div class="value" style="${cur.known?'color:var(--good);':'color:var(--warning);font-size:22px;'}">${cur.known ? money(cur.value)+'/mês' : '🏗️ Pendente de entrega de obra'}</div>
+        <div class="note">${cur.note}</div>
+      </div>
+    </div>
+
+    <div class="d-section">
+      <div class="d-section-title"><span class="em">🏠</span> Dados do contrato</div>
+      <div class="kv-grid">
+        <div class="kv"><div class="k">Locador</div><div class="v">${c.locador}</div></div>
+        <div class="kv"><div class="k">Locatário</div><div class="v">${c.locatario}</div></div>
+        <div class="kv wide"><div class="k">Endereço</div><div class="v">${c.endereco}</div></div>
+        <div class="kv"><div class="k">Área</div><div class="v">${c.area}</div></div>
+        <div class="kv"><div class="k">Assinatura</div><div class="v">${fmtDate(c.dataAssinatura)}</div></div>
+        <div class="kv wide"><div class="k">Prazo de vigência</div><div class="v">${c.prazoLabel}</div></div>
+        <div class="kv wide"><div class="k">Carência</div><div class="v">${c.carencia}</div></div>
+        <div class="kv wide"><div class="k">Garantia locatícia</div><div class="v">${c.garantia}</div></div>
+        <div class="kv wide"><div class="k">Multa rescisória</div><div class="v">${c.multa}</div></div>
+      </div>
+    </div>
+
+    <div class="d-section">
+      <div class="d-section-title"><span class="em">💸</span> Calculadora de multa rescisória</div>
+      <div class="amm-controls" style="margin-bottom:14px;">
+        <div class="fc"><label>Se a rescisão fosse nesta data</label><input type="date" id="multaDate-${c.id}"></div>
+      </div>
+      <div id="multaResult-${c.id}"></div>
+    </div>
+
+    <div class="d-section">
+      <div class="d-section-title"><span class="em">🪜</span> Degraus de aluguel</div>
+      ${renderDegrausBar(c)}
+    </div>
+
+    <div class="d-section">
+      <div class="d-section-title"><span class="em">📈</span> Reajuste anual</div>
+      <div class="reajuste-tiles">
+        <div class="r-tile">
+          <div class="em">🔁</div>
+          <div class="lbl">Índice</div>
+          <div class="val">${c.indice}</div>
+        </div>
+        <div class="r-tile">
+          <div class="em">📅</div>
+          <div class="lbl">Frequência</div>
+          <div class="val">Anual</div>
+        </div>
+        <div class="r-tile ${hasCap?'good':'bad'}">
+          <div class="em">${hasCap?'🟢':'🔴'}</div>
+          <div class="lbl">Teto (limite)</div>
+          <div class="val">${hasCap ? c.cap+'% a.a.' : 'Sem teto'}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-section">
+      <div class="d-section-title"><span class="em">📝</span> Observações importantes</div>
+      <ul class="obs-list">${c.observacoes.map(o=>`<li>${o}</li>`).join('')}</ul>
+    </div>
+
+    <div class="d-section">
+      <div class="d-section-title"><span class="em">🧮</span> Projetor de aluguel futuro (AMM)</div>
+      <div class="badge-note">⚠ Simulação: o índice de reajuste futuro é desconhecido. Ajuste a taxa anual assumida para simular cenários.</div>
+      <div class="amm-controls">
+        <div class="fc"><label>Início assumido</label><input type="date" id="ammStart-${c.id}"></div>
+        <div class="fc"><label>Taxa anual (%)</label><input type="number" id="ammRate-${c.id}" value="5" step="0.1"></div>
+        <div class="fc"><label>Anos</label><input type="number" id="ammYears-${c.id}" value="${Math.min(10, Math.ceil(c.prazoMeses/12))}" step="1" min="1"></div>
+      </div>
+      <div id="ammChartWrap-${c.id}"></div>
+      <div class="amm-scroll"><table class="amm-table" id="ammTable-${c.id}"></table></div>
+    </div>
+  `;
+  const nomeExpSub = c.nomeFantasiaNota ? `${c.nomeCompleto} (${c.nomeFantasiaNota})` : c.nomeCompleto;
+  openDrawer(c.nomeFantasia || c.nomeCompleto, `${nomeExpSub} · ${c.locatario} · ${STATUS_LABEL[c.status]}`, body);
+
+  const multaDateInput = document.getElementById(`multaDate-${c.id}`);
+  multaDateInput.value = TODAY.toISOString().slice(0,10);
+  function refreshMulta(){
+    const d = new Date(multaDateInput.value+'T00:00:00');
+    document.getElementById(`multaResult-${c.id}`).innerHTML = renderMultaResult(c, d);
+  }
+  multaDateInput.addEventListener('change', refreshMulta);
+  refreshMulta();
+
+  const startInput = document.getElementById(`ammStart-${c.id}`);
+  startInput.value = c.dataInicioReal || TODAY.toISOString().slice(0,10);
+  function refresh(){
+    const rate = parseFloat(document.getElementById(`ammRate-${c.id}`).value) || 0;
+    const years = parseInt(document.getElementById(`ammYears-${c.id}`).value) || 10;
+    const rows = computeProjection(c, new Date(startInput.value+'T00:00:00'), rate, years);
+    renderAmmChart(c, rows);
+    renderAmmTable(c, rows);
+  }
+  document.getElementById(`ammRate-${c.id}`).addEventListener('input', refresh);
+  document.getElementById(`ammYears-${c.id}`).addEventListener('input', refresh);
+  startInput.addEventListener('change', refresh);
+  refresh();
+}
+
+function renderAmmChart(c, rows){
+  const w = 900, h = 230, padL = 60, padR = 15, padT = 15, padB = 30;
+  const maxV = Math.max(...rows.map(r=>r.valor)) * 1.1 || 1;
+  const xStep = (w - padL - padR) / (rows.length - 1 || 1);
+  const yScale = v => padT + (h - padT - padB) * (1 - v/maxV);
+  let path = "";
+  rows.forEach((r,i)=>{
+    const x = padL + i*xStep, y = yScale(r.valor);
+    path += (i===0 ? `M${x},${y}` : ` L${x},${y}`);
+  });
+  let grid = "";
+  for(let i=0;i<=3;i++){
+    const v = maxV*i/3, y = yScale(v);
+    grid += `<line x1="${padL}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+    grid += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10" fill="#6b7080">${money(v)}</text>`;
+  }
+  let markers = "";
+  rows.forEach((r,i)=>{
+    if(r.evento){
+      const x = padL + i*xStep, y = yScale(r.valor);
+      markers += `<circle cx="${x}" cy="${y}" r="4" fill="#3aa0ff" stroke="#0e1117" stroke-width="1.5"><title>${r.data.toLocaleDateString('pt-BR')} · ${r.evento} · ${moneyDec(r.valor)}</title></circle>`;
+    }
+  });
+  let xlabels = "";
+  rows.forEach((r,i)=>{
+    if((r.mes-1) % 12 === 0){
+      const x = padL + i*xStep;
+      xlabels += `<text x="${x}" y="${h-padB+16}" text-anchor="middle" font-size="10" fill="#6b7080">${r.data.getFullYear()}</text>`;
+    }
+  });
+  document.getElementById(`ammChartWrap-${c.id}`).innerHTML = `
+    <svg class="chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">
+      ${grid}
+      <line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+      <path d="${path}" fill="none" stroke="#3aa0ff" stroke-width="2.5"/>
+      ${markers}
+      ${xlabels}
+    </svg>`;
+}
+
+function addDays(date, n){ const d = new Date(date); d.setDate(d.getDate()+n); return d; }
+
+function renderAmmTable(c, rows){
+  const shown = rows.filter((r,i)=> r.evento || i===0 || i===rows.length-1 || (r.mes % 12 === 1));
+  const trs = shown.map((r,i)=>{
+    const next = shown[i+1];
+    const periodo = next
+      ? `${r.data.toLocaleDateString('pt-BR')} – ${addDays(next.data,-1).toLocaleDateString('pt-BR')}`
+      : `a partir de ${r.data.toLocaleDateString('pt-BR')}`;
+    return `<tr><td>${r.mes}</td><td class="period">${periodo}</td><td class="num">${moneyDec(r.valor)}</td><td>${r.evento||'—'}</td></tr>`;
+  }).join('');
+  document.getElementById(`ammTable-${c.id}`).innerHTML = `
+    <thead><tr><th>Mês</th><th>Período de vigência</th><th>Valor</th><th>Evento</th></tr></thead><tbody>${trs}</tbody>`;
+}
+
+function bindListRowClicks(){
+  drawer.querySelectorAll('[data-open-contract]').forEach(row=>{
+    row.addEventListener('click', ()=> showView(()=>openContractDetail(row.dataset.openContract)));
+  });
+}
+
+/* =========================================================
+   GRID DE CONTRATOS (cards principais)
+   ========================================================= */
+function renderContractGrid(){
+  const html = CONTRACTS.map(c=>{
+    const cur = getCurrentValue(c);
+    const hasCap = !!c.cap;
+    const metric = cur.known
+      ? `<div class="metric-value">${money(cur.value)}<span style="font-size:11px;color:var(--text-muted);font-weight:600;">/mês</span></div>`
+      : `<div class="metric-value muted">🏗️ Pendente de entrega</div>`;
+    return `
+    <div class="c-card" data-id="${c.id}" data-search="${(c.nome+' '+(c.nomeFantasia||'')+' '+c.locador+' '+c.locatario+' '+c.endereco).toLowerCase()}">
+      <div class="top-row">
+        <div class="icon" style="background:${CARD_SOFT[c.status]};color:${CARD_COLOR[c.status]};">${ICONS[c.id]||"🏢"}</div>
+        <span class="pill-status st-${c.status}"><span class="dot"></span>${STATUS_LABEL[c.status]}</span>
+      </div>
+      <div class="name">${c.nomeFantasia || c.nome}</div>
+      <div class="fantasia">${c.nome}${c.nomeFantasiaNota ? ` — ${c.nomeFantasiaNota}` : ''}</div>
+      <div class="addr">${c.endereco}</div>
+      <div class="metric-label">${cur.known ? "Valor pago hoje" : "Situação"}</div>
+      ${metric}
+      <div class="foot-row">
+        <span class="mini-tag idx">🔁 ${c.indice.split(' (')[0]}</span>
+        <span class="mini-tag ${hasCap?'cap-yes':'cap-no'}">${hasCap ? '🟢 Teto '+c.cap+'%' : '🔴 Sem teto'}</span>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('contractGrid').innerHTML = html;
+  document.querySelectorAll('.c-card').forEach(card=>{
+    card.addEventListener('click', ()=> showView(()=>openContractDetail(card.dataset.id), {root:true}));
+  });
+}
+
+/* =========================================================
+   BUSCA
+   ========================================================= */
+function applyFilters(){
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  let visible = 0;
+  document.querySelectorAll('.c-card').forEach(card=>{
+    const ok = !q || card.dataset.search.includes(q);
+    card.classList.toggle('hidden', !ok);
+    if(ok) visible++;
+  });
+  document.getElementById('gridCount').textContent = `${visible} de ${CONTRACTS.length} exibidos`;
+}
+document.getElementById('searchBox').addEventListener('input', applyFilters);
+
+/* =========================================================
+   HERO CARD BINDINGS
+   ========================================================= */
+document.getElementById('heroContratos').addEventListener('click', ()=> showView(openContractsList, {root:true}));
+document.getElementById('heroAluguel').addEventListener('click', ()=> showView(openAluguelDetail, {root:true}));
+document.getElementById('heroRiscos').addEventListener('click', ()=> showView(openSemTetoDetail, {root:true}));
+
+/* =========================================================
+   INIT
+   ========================================================= */
+function init(){
+  document.getElementById('updatedDate').textContent = TODAY.toLocaleDateString('pt-BR');
+  document.getElementById('kpiTotalContratos').textContent = CONTRACTS.length;
+  const pendCount = CONTRACTS.filter(c=>c.status==='pendente').length;
+  const vigCount = CONTRACTS.filter(c=>c.status==='vigente').length;
+  document.getElementById('kpiTotalSub').innerHTML = `<b>${vigCount}</b> vigentes · <b>${pendCount}</b> pendentes de entrega`;
+  const t = computeTotals();
+  document.getElementById('kpiPagoHoje').textContent = money(t.pagoHoje);
+  document.getElementById('kpiPagoHojeSub').innerHTML = `Pleno comprometido (após entregas): <b>${money(t.plenoComprometido)}</b>`;
+  const semTeto = CONTRACTS.filter(c=>!c.cap).length;
+  document.getElementById('kpiSemTeto').textContent = `${semTeto} de ${CONTRACTS.length}`;
+  renderContractGrid();
+  applyFilters();
+}
+init();
+</script>
+</body>
+</html>
