@@ -236,6 +236,29 @@
   .list-row .li-note{font-size:10.5px;color:var(--text-muted);margin-top:2px;}
   .list-row .chev{color:var(--text-muted);font-size:14px;margin-left:4px;}
 
+  .amm-controls select{
+    padding:9px 11px;border:1px solid var(--border);border-radius:9px;font-size:13px;background:var(--card);
+    color:var(--text-primary);font-family:inherit;width:100%;
+  }
+  .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .cmp-box{background:linear-gradient(160deg,var(--card-2),var(--card));border:1px solid var(--border);border-radius:14px;padding:16px 18px;}
+  .cmp-box .lbl{font-size:11.5px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+  .cmp-box .val{font-size:30px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums;}
+  .cmp-box .sub{font-size:12px;color:var(--text-secondary);margin-top:4px;}
+  .cmp-box.contr .val{color:var(--accent);}
+  .cmp-box.real .val{color:var(--good);}
+  .cmp-gap{border-radius:14px;padding:14px 16px;margin-bottom:14px;font-size:14.5px;font-weight:800;}
+  .cmp-gap small{display:block;font-weight:500;color:var(--text-secondary);font-size:12px;margin-top:4px;}
+  .cmp-gap.under{background:var(--critical-soft);color:var(--critical);}
+  .cmp-gap.over,.cmp-gap.ok{background:var(--good-soft);color:var(--good);}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px;color:var(--text-secondary);}
+  .bar-row .bn{width:64px;flex:none;}
+  .bar-track{flex:1;background:rgba(255,255,255,0.05);border-radius:8px;height:16px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:8px;transition:width .35s ease;}
+  .bar-row .bv{width:80px;text-align:right;font-weight:800;color:var(--text-primary);font-variant-numeric:tabular-nums;}
+  .c-card .gap-line{font-size:11.5px;color:var(--text-secondary);margin-top:-2px;}
+  .c-card .gap-line b:last-child{color:var(--critical);}
+  @media(max-width:560px){.cmp-grid{grid-template-columns:1fr;}}
   .badge-note{font-size:12px;color:var(--text-secondary);background:rgba(255,255,255,0.03);border:1px dashed var(--border);border-radius:10px;padding:11px 13px;margin-bottom:16px;}
 </style>
 </head>
@@ -581,6 +604,45 @@ const CONTRACTS = [
       "Locatária (Amgeza Foods) é responsável pela retenção de IR na fonte, já que os locadores são pessoas físicas — obrigação que não aparece nos demais contratos, cujos locadores são pessoas jurídicas."
     ]
   },
+  {
+    id:"caravelle", nome:"Av. Luiz Rosseto, 317 (Caravelle)", nomeCompleto:"Av. Luiz Rosseto, 317 (Caravelle)", nomeFantasia:"Caravelle",
+    locador:"Neide Maria Cunha (pessoa física)",
+    locatario:"Serbase Food Comércio Atacadista de Alimentos – Eireli",
+    endereco:"Av. Luiz Rosseto, 317, Bairro Caravelle, Londrina/PR",
+    area:"462,28 m² terreno / 239,20 m² construída", tipo:"Imóvel pronto (comercial)", status:"vigente",
+    dataAssinatura:"2019-08-27", dataInicioReal:"2019-08-28", prazoMeses:120,
+    prazoLabel:"120 meses (10 anos), de 28/08/2019 a 27/08/2029; renovação automática por igual período (cl. 6)",
+    valorBase:2500, degraus:[],
+    indice:"IGP-M", periodicidade:"Anual (aniversário em 28/08)", cap:null,
+    carencia:"Não prevista",
+    garantia:"Não prevista (sem fiador, caução ou seguro-fiança). Locatário paga seguro contra incêndio do imóvel (cl. 9).",
+    multa:"3 salários mínimos (cl. 16 e 17). Na devolução antecipada, a multa é dispensada se já passaram mais de 60 meses de vigência (cl. 17).",
+    multaRule:{tipo:"sm_dispensa", n:3, sm:1621, dispensaAposMeses:60},
+    valorPagoReal:3500,
+    pagamentoReal:"Por volta do dia 28 de cada mês (conforme dia útil)",
+    reajustesIndice:[
+      {data:"2020-08-28", pct:13.02, ref:"IGP-M ago/2020"},
+      {data:"2021-08-28", pct:31.12, ref:"IGP-M ago/2021"},
+      {data:"2022-08-28", pct:8.59,  ref:"IGP-M ago/2022"},
+      {data:"2023-08-28", pct:-7.20, ref:"IGP-M ago/2023"},
+      {data:"2024-08-28", pct:4.26,  ref:"IGP-M ago/2024"},
+      {data:"2025-08-28", pct:3.03,  ref:"IGP-M ago/2025"},
+      {data:"2026-08-28", pct:2.16,  ref:"IGP-M ago/2026"}
+    ],
+    observacoes:[
+      "Contrato de 2019, com 120 meses (até 27/08/2029). Restam cerca de 34 meses.",
+      "O reajuste anual pelo IGP-M não vem sendo aplicado à risca: o valor pago hoje (R$ 3.500) é menor que o valor contratual. Veja o comparativo no topo desta tela.",
+      "O contrato não prevê piso zero: um IGP-M negativo (como em ago/2023, −7,20%) pode reduzir o aluguel. Use o seletor do comparativo para ver os dois cenários.",
+      "Pagamento: o contrato fixa até o dia 05 do mês seguinte (tolerância até o 5º dia útil). Pagar por volta do dia 28 está dentro do prazo.",
+      "Atraso: multa de 2% + juros de 1% ao mês; após 30 dias, soma-se correção monetária pela TR (cl. 3 e 4).",
+      "Multa por devolução antecipada: dispensada após 60 meses de vigência (cl. 17). Como já passaram mais de 60 meses, hoje ela é R$ 0 — mas a cl. 16 (3 salários mínimos por infração contratual) continua valendo.",
+      "Sem garantia locatícia prevista — situação favorável ao locatário.",
+      "Diferenças de reajuste não aplicado podem, em tese, ser cobradas pelo locador (aluguéis prescrevem em 3 anos — CC, art. 206, §3º, I). Vale alinhar com o jurídico.",
+      "Pontos de atenção jurídicos: sem vênia conjugal da locadora (contrato de 10 anos), sem assinaturas de testemunhas na folha 5 e sem cláusula de vigência em caso de venda do imóvel (Lei 8.245, art. 8º).",
+      "Janela para ação renovatória: de 27/08/2028 a 27/02/2029.",
+      "Locatário consta como Eireli (modelo extinto em 2021, convertido em SLU) — confirmar a continuidade com a Serbase Food Ltda dos demais contratos."
+    ]
+  },
 ];
 
 const TODAY = new Date();
@@ -589,7 +651,7 @@ const money = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', 
 const moneyDec = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
 const fmtDate = s => s ? new Date(s+'T00:00:00').toLocaleDateString('pt-BR') : 'N/A';
 
-const ICONS = {cambe:"🏬", camelias:"🌸", casone:"🏗️", ibipora:"🏗️", leonor:"🏗️", mangaba:"🔧", rolandia:"🏗️", vascodagama:"🔧", waldemars:"🔧", sunset:"🏗️", paranagua:"🍔"};
+const ICONS = {cambe:"🏬", camelias:"🌸", casone:"🏗️", ibipora:"🏗️", leonor:"🏗️", mangaba:"🔧", rolandia:"🏗️", vascodagama:"🔧", waldemars:"🔧", sunset:"🏗️", paranagua:"🍔", caravelle:"🏠"};
 const CARD_COLOR = {vigente:"var(--good)", pendente:"var(--warning)"};
 const CARD_SOFT  = {vigente:"var(--good-soft)", pendente:"var(--warning-soft)"};
 const STATUS_LABEL = {vigente:"Vigente", pendente:"Pendente de entrega"};
@@ -602,6 +664,22 @@ function valorContratualNoMes(c, mes){
   for(const d of c.degraus){ if(mes >= d.de && mes <= d.ate) return d.valor; }
   return c.degraus[c.degraus.length-1].valor;
 }
+/* Contratos com reajuste IGP-M histórico: valor contratual (o que "deveria" ser pago) x valor realmente pago */
+function round2(v){ return Math.round(v*100)/100; }
+function contratualSerie(c, pisoZero){
+  let v = c.valorBase;
+  const rows = [{data:c.dataInicioReal, pct:null, ref:"Valor inicial do contrato", valor:v, aplicado:true}];
+  (c.reajustesIndice||[]).forEach(r=>{
+    const p = pisoZero ? Math.max(r.pct,0) : r.pct;
+    v = round2(v*(1+p/100));
+    rows.push({data:r.data, pct:r.pct, ref:r.ref, valor:v, aplicado:new Date(r.data+'T00:00:00') <= TODAY});
+  });
+  return rows;
+}
+function getContratualHoje(c, pisoZero){
+  const rows = contratualSerie(c, !!pisoZero).filter(r=>r.aplicado);
+  return rows[rows.length-1].valor;
+}
 function monthsElapsed(startStr, ref){
   const start = new Date(startStr+'T00:00:00');
   let m = (ref.getFullYear()-start.getFullYear())*12 + (ref.getMonth()-start.getMonth()) + 1;
@@ -612,6 +690,16 @@ function getCurrentValue(c){
     return {known:false, value:null, note:`Pendente — aguardando entrega de obra. Valor pleno previsto: ${money(c.valorBase)}/mês.`};
   }
   const m = Math.min(monthsElapsed(c.dataInicioReal, TODAY), c.prazoMeses);
+  if(c.valorPagoReal != null && c.reajustesIndice){
+    const contr = getContratualHoje(c, false);
+    const gap = contr - c.valorPagoReal;
+    return {
+      known:true, value:c.valorPagoReal, mes:m, contratual:contr, gap,
+      note: gap > 0.5
+        ? `Valor realmente pago (mês ${m} de ${c.prazoMeses}). Pelo contrato (IGP-M), deveria ser ${money(contr)} — diferença de ${money(gap)}/mês.`
+        : `Valor realmente pago (mês ${m} de ${c.prazoMeses}), alinhado ao contrato (${money(contr)}).`
+    };
+  }
   const value = valorContratualNoMes(c, m);
   const plateauStart = c.degraus.length ? c.degraus[c.degraus.length-1].de : 1;
   const emFase = m < plateauStart;
@@ -648,6 +736,15 @@ function computeMulta(c, dataRescisao){
   } else if(rule.tipo === "percentual_vincendos"){
     valor = rule.pct * valorRef * restantes;
     formula = `${(rule.pct*100).toFixed(0)}% × aluguel vigente (${moneyDec(valorRef)}) × ${restantes} meses restantes de contrato.`;
+  } else if(rule.tipo === "sm_dispensa"){
+    const valorSM = rule.n * rule.sm;
+    if(decorridos > rule.dispensaAposMeses){
+      valor = 0;
+      formula = `Multa por devolução antecipada DISPENSADA: já passaram ${decorridos} meses de vigência (a cláusula 17 dispensa após ${rule.dispensaAposMeses} meses). Atenção: infração contratual (cl. 16) segue sujeita a ${rule.n} salários mínimos (${moneyDec(valorSM)}).`;
+    } else {
+      valor = valorSM * (restantes / c.prazoMeses);
+      formula = `${rule.n} salários mínimos (${moneyDec(valorSM)}), reduzidos proporcionalmente ao tempo cumprido (Lei 8.245, art. 4º) — restam ${restantes} de ${c.prazoMeses} meses.`;
+    }
   } else if(rule.tipo === "tiers_ibipora"){
     if(decorridos <= 24){ valor = 20*valorRef; formula = `20 aluguéis do valor vigente — regra aplicável até o 24º mês (estamos no mês ${decorridos}).`; }
     else if(decorridos <= 48){ valor = 10*valorRef; formula = `10 aluguéis do valor vigente — regra aplicável entre o 24º e o 48º mês (estamos no mês ${decorridos}).`; }
@@ -675,6 +772,22 @@ function renderMultaResult(c, dataRescisao){
    ========================================================= */
 function computeProjection(c, startDate, annualRatePct, years){
   const rate = annualRatePct/100;
+  if(c.reajustesIndice){
+    // Contrato em curso com histórico de IGP-M: parte do valor CONTRATUAL de hoje e aplica a taxa assumida a cada aniversário (28/08)
+    const base = getContratualHoje(c, false);
+    const m0 = Math.min(monthsElapsed(c.dataInicioReal, TODAY), c.prazoMeses);
+    const out = [];
+    let valor = base;
+    for(let m=m0; m<=c.prazoMeses; m++){
+      let evento = "";
+      if(m === m0) evento = "Hoje (valor contratual)";
+      else if((m-1) % 12 === 0){ valor = round2(valor*(1+rate)); evento = "Reajuste anual"; }
+      const d = new Date(c.dataInicioReal+'T00:00:00');
+      d.setMonth(d.getMonth() + (m-1));
+      out.push({mes:m, data:d, valor, evento});
+    }
+    return out;
+  }
   const totalMonths = Math.min(years*12, c.prazoMeses || years*12);
   const rows = [];
   const plateauStart = c.degraus.length ? c.degraus[c.degraus.length-1].de : 1;
@@ -774,7 +887,7 @@ function openContractsList(){
 function computeTotals(){
   let pagoHoje = 0, plenoComprometido = 0;
   CONTRACTS.forEach(c=>{
-    plenoComprometido += c.valorBase;
+    plenoComprometido += c.reajustesIndice ? getContratualHoje(c,false) : c.valorBase;
     const cur = getCurrentValue(c);
     if(cur.known) pagoHoje += cur.value;
   });
@@ -800,7 +913,7 @@ function openAluguelDetail(){
       <div class="li-right-wrap">
         <div class="li-right">
           <div class="li-value" style="${cur.known?'':'color:var(--warning);font-size:12.5px;'}">${valTxt}</div>
-          <div class="li-note">pleno: ${money(c.valorBase)}</div>
+          <div class="li-note">${c.reajustesIndice ? 'contrato: '+money(getContratualHoje(c,false)) : 'pleno: '+money(c.valorBase)}</div>
         </div>
         <span class="chev">›</span>
       </div>
@@ -885,13 +998,29 @@ function openContractDetail(id){
   const cur = getCurrentValue(c);
   const hasCap = !!c.cap;
   const body = `
+    ${c.reajustesIndice ? `
+    <div class="d-section">
+      <div class="d-section-title"><span class="em">⚖️</span> Contratual × Real — o que deveria ser pago x o que pagamos</div>
+      <div id="cmpWrap-${c.id}"></div>
+      <div class="amm-controls" style="margin-top:14px;">
+        <div class="fc"><label>Valor realmente pago (R$/mês)</label><input type="number" id="cmpPago-${c.id}" value="${c.valorPagoReal}" step="50" min="0"></div>
+        <div class="fc"><label>Se o IGP-M for negativo</label>
+          <select id="cmpPiso-${c.id}">
+            <option value="literal">Aplicar como no contrato (pode reduzir)</option>
+            <option value="piso">Ignorar índice negativo (piso zero)</option>
+          </select></div>
+      </div>
+      <div class="badge-note" style="margin-bottom:0;">💡 Mude o valor pago ou o cenário e os números atualizam na hora. Pagamento atual: ${c.pagamentoReal}.</div>
+      <div class="d-section-title" style="margin-top:22px;"><span class="em">🗓️</span> Linha do tempo dos reajustes (todo dia 28/08)</div>
+      <div class="amm-scroll" style="max-height:none;"><table class="amm-table" id="cmpTable-${c.id}"></table></div>
+    </div>` : `
     <div class="d-section">
       <div class="big-stat">
         <div class="label">${cur.known ? "Valor pago hoje" : "Status atual"}</div>
         <div class="value" style="${cur.known?'color:var(--good);':'color:var(--warning);font-size:22px;'}">${cur.known ? money(cur.value)+'/mês' : '🏗️ Pendente de entrega de obra'}</div>
         <div class="note">${cur.note}</div>
       </div>
-    </div>
+    </div>`}
 
     <div class="d-section">
       <div class="d-section-title"><span class="em">🏠</span> Dados do contrato</div>
@@ -949,9 +1078,9 @@ function openContractDetail(id){
 
     <div class="d-section">
       <div class="d-section-title"><span class="em">🧮</span> Projetor de aluguel futuro (AMM)</div>
-      <div class="badge-note">⚠ Simulação: o índice de reajuste futuro é desconhecido. Ajuste a taxa anual assumida para simular cenários.</div>
+      <div class="badge-note">⚠ Simulação: o índice de reajuste futuro é desconhecido. Ajuste a taxa anual assumida para simular cenários.${c.reajustesIndice ? ' A projeção parte do <b>valor contratual de hoje</b> ('+money(getContratualHoje(c,false))+'), não do valor pago.' : ''}</div>
       <div class="amm-controls">
-        <div class="fc"><label>Início assumido</label><input type="date" id="ammStart-${c.id}"></div>
+        <div class="fc"><label>Início assumido</label><input type="date" id="ammStart-${c.id}" ${c.reajustesIndice?'disabled':''}></div>
         <div class="fc"><label>Taxa anual (%)</label><input type="number" id="ammRate-${c.id}" value="5" step="0.1"></div>
         <div class="fc"><label>Anos</label><input type="number" id="ammYears-${c.id}" value="${Math.min(10, Math.ceil(c.prazoMeses/12))}" step="1" min="1"></div>
       </div>
@@ -961,6 +1090,15 @@ function openContractDetail(id){
   `;
   const nomeExpSub = c.nomeFantasiaNota ? `${c.nomeCompleto} (${c.nomeFantasiaNota})` : c.nomeCompleto;
   openDrawer(c.nomeFantasia || c.nomeCompleto, `${nomeExpSub} · ${c.locatario} · ${STATUS_LABEL[c.status]}`, body);
+
+  if(c.reajustesIndice){
+    const pagoInput = document.getElementById(`cmpPago-${c.id}`);
+    const pisoSel = document.getElementById(`cmpPiso-${c.id}`);
+    const refreshCmp = ()=> renderComparativo(c, parseFloat(pagoInput.value)||0, pisoSel.value==='piso');
+    pagoInput.addEventListener('input', refreshCmp);
+    pisoSel.addEventListener('change', refreshCmp);
+    refreshCmp();
+  }
 
   const multaDateInput = document.getElementById(`multaDate-${c.id}`);
   multaDateInput.value = TODAY.toISOString().slice(0,10);
@@ -984,6 +1122,49 @@ function openContractDetail(id){
   document.getElementById(`ammYears-${c.id}`).addEventListener('input', refresh);
   startInput.addEventListener('change', refresh);
   refresh();
+}
+
+function renderComparativo(c, pago, pisoZero){
+  const contr = getContratualHoje(c, pisoZero);
+  const gap = contr - pago;
+  const pct = contr ? Math.abs(gap)/contr*100 : 0;
+  const restantes = Math.max(0, c.prazoMeses - monthsElapsed(c.dataInicioReal, TODAY));
+  const under = gap > 0.5, over = gap < -0.5;
+  const gapCls = under ? 'under' : (over ? 'over' : 'ok');
+  const gapTxt = under
+    ? `▼ Pagamos ${moneyDec(gap)} a menos por mês (${pct.toFixed(1).replace('.',',')}% abaixo do contrato)`
+    : (over ? `▲ Pagamos ${moneyDec(-gap)} a mais por mês que o contrato` : `✔ Valor pago está alinhado ao contrato`);
+  const gapSub = under
+    ? `≈ ${money(gap*12)} por ano · ≈ ${money(gap*restantes)} até o fim do contrato (${restantes} meses, sem novos reajustes)`
+    : '';
+  const max = Math.max(contr, pago, 1);
+  document.getElementById(`cmpWrap-${c.id}`).innerHTML = `
+    <div class="cmp-grid">
+      <div class="cmp-box contr">
+        <div class="lbl">📜 Deveria pagar hoje (contrato)</div>
+        <div class="val">${moneyDec(contr)}</div>
+        <div class="sub">R$ ${c.valorBase.toLocaleString('pt-BR')} em 28/08/2019 + ${c.reajustesIndice.filter(r=>new Date(r.data+'T00:00:00')<=TODAY).length} reajustes IGP-M</div>
+      </div>
+      <div class="cmp-box real">
+        <div class="lbl">💳 Pagamos hoje (real)</div>
+        <div class="val">${moneyDec(pago)}</div>
+        <div class="sub">${c.pagamentoReal}</div>
+      </div>
+    </div>
+    <div class="cmp-gap ${gapCls}">${gapTxt}${gapSub ? `<small>${gapSub}</small>` : ''}</div>
+    <div class="cmp-bars">
+      <div class="bar-row"><span class="bn">Contrato</span><div class="bar-track"><div class="bar-fill" style="width:${(contr/max*100).toFixed(1)}%;background:var(--accent);"></div></div><span class="bv">${money(contr)}</span></div>
+      <div class="bar-row"><span class="bn">Pago</span><div class="bar-track"><div class="bar-fill" style="width:${(pago/max*100).toFixed(1)}%;background:var(--good);"></div></div><span class="bv">${money(pago)}</span></div>
+    </div>`;
+  const serie = contratualSerie(c, pisoZero);
+  const trs = serie.map((r,i)=>{
+    const futuro = !r.aplicado;
+    const pctTxt = r.pct==null ? '—' : `<span style="color:${r.pct<0?'var(--critical)':'var(--good)'};font-weight:700;">${r.pct>0?'+':''}${r.pct.toFixed(2).replace('.',',')}%</span>${(pisoZero && r.pct<0)?' <small style="color:var(--text-muted);">(ignorado)</small>':''}`;
+    const ehHoje = r.aplicado && (!serie[i+1] || !serie[i+1].aplicado);
+    return `<tr style="${ehHoje?'background:rgba(58,160,255,0.08);':''}"><td class="period">${fmtDate(r.data)}</td><td>${r.ref}</td><td>${pctTxt}</td><td class="num">${moneyDec(r.valor)}</td><td>${ehHoje?'◀ hoje':''}</td></tr>`;
+  }).join('');
+  document.getElementById(`cmpTable-${c.id}`).innerHTML = `
+    <thead><tr><th>Data</th><th>Índice</th><th>Variação 12m</th><th>Valor contratual</th><th></th></tr></thead><tbody>${trs}</tbody>`;
 }
 
 function renderAmmChart(c, rows){
@@ -1066,8 +1247,9 @@ function renderContractGrid(){
       <div class="name">${c.nomeFantasia || c.nome}</div>
       <div class="fantasia">${c.nome}${c.nomeFantasiaNota ? ` — ${c.nomeFantasiaNota}` : ''}</div>
       <div class="addr">${c.endereco}</div>
-      <div class="metric-label">${cur.known ? "Valor pago hoje" : "Situação"}</div>
+      <div class="metric-label">${cur.known ? (cur.contratual ? "Pago hoje (real)" : "Valor pago hoje") : "Situação"}</div>
       ${metric}
+      ${cur.contratual ? `<div class="gap-line">📜 Contrato: <b style="color:var(--accent);">${money(cur.contratual)}</b>${cur.gap>0.5 ? ` · <b>▼ ${money(cur.gap)}/mês abaixo</b>` : ''}</div>` : ''}
       <div class="foot-row">
         <span class="mini-tag idx">🔁 ${c.indice.split(' (')[0]}</span>
         <span class="mini-tag ${hasCap?'cap-yes':'cap-no'}">${hasCap ? '🟢 Teto '+c.cap+'%' : '🔴 Sem teto'}</span>
