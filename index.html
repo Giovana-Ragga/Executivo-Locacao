@@ -388,7 +388,7 @@ const CONTRACTS = [
     locatario:"Corn Food Comércio de Alimentos Ltda",
     endereco:"Av. Guilherme de Almeida, 51, Loja 01 / Rua das Camélias, 55, Londrina/PR",
     area:"N/A", tipo:"Imóvel existente", status:"vigente",
-    dataAssinatura:"2023-12-05", dataInicioReal:"2023-11-25", prazoMeses:60,
+    dataAssinatura:"2023-12-05", dataInicioReal:"2023-11-25", primeiroAluguel:"2024-01-24", prazoMeses:60,
     prazoLabel:"60 meses — término previsto 24/11/2028",
     valorBase:7500, degraus:[],
     indice:"IGP-M", periodicidade:"Anual", cap:null,
@@ -497,7 +497,7 @@ const CONTRACTS = [
     locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda EPP",
     endereco:"Lote 0004, Quadra 104, Rolândia/PR",
     area:"808,75 m² terreno", tipo:"BTS (construção)", status:"vigente",
-    dataAssinatura:"2024-07-23", dataInicioReal:"2025-09-02", prazoMeses:60,
+    dataAssinatura:"2024-07-23", dataInicioReal:"2025-09-02", primeiroAluguel:"2025-11-01", prazoMeses:60,
     prazoLabel:"60 meses, renovável por igual período, a contar da entrega da obra",
     valorBase:15000, degraus:[],
     indice:"IGP-M", periodicidade:"Anual (ou menor prazo se lei permitir)", cap:null,
@@ -538,7 +538,7 @@ const CONTRACTS = [
     locatario:"Serbase Food Comércio Atacadista de Alimentos Ltda",
     endereco:"Av. Waldemar Spranger, 55, Jardim São Jorge, Londrina/PR",
     area:"N/A (sobrado a reformar)", tipo:"BTS (reforma)", status:"pendente",
-    dataAssinatura:"2025-08-26", dataInicioReal:null, prazoMeses:60,
+    dataAssinatura:"2025-08-26", dataInicioReal:null, primeiroAluguel:"2025-09-05", prazoMeses:60,
     prazoLabel:"60 meses, a contar da entrega da obra",
     valorBase:6000,
     degraus:[
@@ -588,7 +588,7 @@ const CONTRACTS = [
     locatario:"Amgeza Foods Comércio de Alimentos Ltda",
     endereco:"Rua Paranaguá, 565, Loja, Centro, Londrina/PR",
     area:"N/A (metragem não informada no contrato)", tipo:"Imóvel pronto para uso", status:"vigente",
-    dataAssinatura:"2023-11-07", dataInicioReal:"2023-11-10", prazoMeses:60,
+    dataAssinatura:"2023-11-07", dataInicioReal:"2023-11-10", primeiroAluguel:"2023-11-10", prazoMeses:60,
     prazoLabel:"60 meses, de 10/11/2023 a 09/11/2028 (datas fixas em contrato)",
     valorBase:6480, degraus:[],
     indice:"IGP-M (ou IGP-DI na falta deste)", periodicidade:"Anual", cap:null,
@@ -605,12 +605,12 @@ const CONTRACTS = [
     ]
   },
   {
-    id:"caravelle", nome:"Av. Luiz Rosseto, 317 (Caravelle)", nomeCompleto:"Av. Luiz Rosseto, 317 (Caravelle)", nomeFantasia:"Caravelle",
+    id:"caravelle", nome:"Av. Luiz Rosseto, 317 (Caravelle)", nomeCompleto:"Av. Luiz Rosseto, 317 (Caravelle)", nomeFantasia:"CT Vespa",
     locador:"Neide Maria Cunha (pessoa física)",
     locatario:"Serbase Food Comércio Atacadista de Alimentos – Eireli",
     endereco:"Av. Luiz Rosseto, 317, Bairro Caravelle, Londrina/PR",
     area:"462,28 m² terreno / 239,20 m² construída", tipo:"Imóvel pronto (comercial)", status:"vigente",
-    dataAssinatura:"2019-08-27", dataInicioReal:"2019-08-28", prazoMeses:120,
+    dataAssinatura:"2019-08-27", dataInicioReal:"2019-08-28", primeiroAluguel:"2019-08-28", prazoMeses:120,
     prazoLabel:"120 meses (10 anos), de 28/08/2019 a 27/08/2029; renovação automática por igual período (cl. 6)",
     valorBase:2500, degraus:[],
     indice:"IGP-M", periodicidade:"Anual (aniversário em 28/08)", cap:null,
@@ -644,6 +644,17 @@ const CONTRACTS = [
     ]
   },
 ];
+
+/* Ordem dos cards: 1º e 2º fixos (Vespa); demais por "idade" = data de cobrança do 1º aluguel (mais antigo primeiro).
+   Contratos ainda sem aluguel cobrado (pendentes de entrega) vêm depois, por data de assinatura. */
+const ORDEM_FIXA = ["cambe","caravelle"];
+CONTRACTS.sort((a,b)=>{
+  const fa = ORDEM_FIXA.indexOf(a.id), fb = ORDEM_FIXA.indexOf(b.id);
+  if(fa>=0 || fb>=0) return (fa<0?99:fa) - (fb<0?99:fb);
+  const ga = a.primeiroAluguel ? 0 : 1, gb = b.primeiroAluguel ? 0 : 1;
+  if(ga !== gb) return ga - gb;
+  return (a.primeiroAluguel || a.dataAssinatura).localeCompare(b.primeiroAluguel || b.dataAssinatura);
+});
 
 const TODAY = new Date();
 
